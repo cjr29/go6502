@@ -27,10 +27,10 @@ import (
 	"strings"
 
 	"github.com/beevik/cmd"
-	"github.com/cjr/go6502/asm"
-	"github.com/cjr/go6502/cpu"
-	"github.com/cjr/go6502/disasm"
-	"github.com/cjr/go6502/term"
+	"github.com/cjr29/go6502/asm"
+	"github.com/cjr29/go6502/cpu"
+	"github.com/cjr29/go6502/disasm"
+	"github.com/cjr29/go6502/term"
 )
 
 type state byte
