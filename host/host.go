@@ -80,6 +80,8 @@ type IoState struct {
 
 // New creates a new 6502 host environment.
 func New() *Host {
+	fmt.Println("***** Entered go6502.host.New()")
+
 	console := struct {
 		io.Reader
 		io.Writer

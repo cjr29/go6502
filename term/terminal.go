@@ -6,6 +6,7 @@ package term
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"strconv"
 	"sync"
@@ -95,6 +96,8 @@ type Terminal struct {
 // prompt is a string that is written at the start of each input line (i.e.
 // "> ").
 func NewTerminal(c io.ReadWriter, prompt string) *Terminal {
+	fmt.Println("***** Entered go6502.term.NewTerminal()")
+
 	return &Terminal{
 		c:            c,
 		prompt:       []rune(prompt),

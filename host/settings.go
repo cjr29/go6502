@@ -53,6 +53,7 @@ var (
 )
 
 func init() {
+	fmt.Println("***** Entered go6502.host.settings.init()")
 	settingsType := reflect.TypeOf(settings{})
 	settingsFields = make([]settingsField, settingsType.NumField())
 	for i := 0; i < len(settingsFields); i++ {
