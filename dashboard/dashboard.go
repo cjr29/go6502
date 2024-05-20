@@ -3,6 +3,7 @@ package dashboard
 import (
 	"fmt"
 	"image/color"
+	"os"
 	"time"
 
 	"fyne.io/fyne/v2"
@@ -54,7 +55,7 @@ var (
 var Console = container.NewVBox()
 var ConsoleScroller = container.NewVScroll(Console)
 
-func New(cpu *cpu.CPU, reset func(), load func(), step func(), run func(), pause func(), exit func()) fyne.Window {
+func New(cpu *cpu.CPU) fyne.Window {
 
 	fmt.Println("Entering dashboard.New")
 	c = cpu // All data comes from the CPU structure object
@@ -130,7 +131,7 @@ func New(cpu *cpu.CPU, reset func(), load func(), step func(), run func(), pause
 	registerHeader = widget.NewLabel("Registers\n16-bit words\n")
 	registerHeader.TextStyle.Monospace = true
 	registerHeader.TextStyle.Bold = true
-	registerDisplay = cpu.GetRegisters()
+	registerDisplay = cpu.Reg.GetRegisters()
 	registerDisplayWidget = widget.NewLabel(registerDisplay)
 	registerDisplayWidget.TextStyle.Monospace = true
 	registerDisplayWidget.TextStyle.Bold = true
@@ -142,7 +143,7 @@ func New(cpu *cpu.CPU, reset func(), load func(), step func(), run func(), pause
 		))
 
 	// Memory
-	memoryDisplay = cpu.GetAllMemory()
+	memoryDisplay = cpu.Mem.GetAllMemory()
 	memoryLabel = widget.NewLabel("Memory\nbytes\n")
 	memoryLabel.TextStyle.Monospace = true
 	memoryLabel.TextStyle.Bold = true
@@ -207,7 +208,7 @@ func UpdateAll() {
 	//	inputCPUClock.SetText(fmt.Sprintf("%3f", c.Clock))
 	stackDisplay = c.GetStack()
 	stackLabelWidget.Text = stackDisplay
-	memoryDisplay = c.GetAllMemory()
+	memoryDisplay = GetAllMemory()
 	memoryGridLabel.SetText(memoryDisplay)
 	registerDisplay = c.GetRegisters()
 	registerDisplayWidget.Text = registerDisplay
@@ -255,4 +256,82 @@ func ConsoleWrite(text string) {
 		ConsoleScroller.ScrollToBottom()
 	}
 	Console.Refresh()
+}
+
+//=================== Added Chris Riddick 2024 ======================
+
+func load() {
+	// Loads code in []program into CPU memory at index 0
+	// DO NOTHING
+}
+
+func run() {
+	// DO NOTHING
+}
+
+func step() {
+	// DO NOTHING
+}
+
+func reset() {
+	// DO NOTHING
+}
+
+func pause() {
+	// DO NOTHING
+}
+
+func exit() {
+	os.Exit(0)
+}
+
+//=================== Added, Chris Riddick, 2024 ====================
+
+// GetRegisters returns a formatted string of register values
+func GetRegisters() string {
+	//var s string
+	// for i := 0; i < len(c.Reg.A); i++ {
+	// 	s = s + fmt.Sprintf("R%02d: x%04x\n", i, c.Registers[i])
+	// }
+	s := "Register\nlisting\ngoes\nhere\n"
+	return s
+}
+
+// GetStack returns a formatted string of bytes beginning at SP down to to of stack
+func GetStack() string {
+	//var s string
+	// for i := c.Reg.SP; i <= c.StackHead; i = i + 2 {
+	// 	s = s + fmt.Sprintf("%04x: x%04x\n", i, binary.BigEndian.Uint16(c.Memory[i:]))
+	// }
+	s := "Stack\nlisting\ngoes\nhere\n"
+	return s
+}
+
+// GetAllMemory returns a 16 byte formatted string starting at 0000
+func GetAllMemory() string {
+	//var line string
+	/*	blocks := len(c.Memory) / 16
+		remainder := len(c.Memory) % 16
+		// Send header line with memory locations
+		line = "       00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f\n"
+		k := 0
+		for j := 0; j < blocks; j++ {
+			line = line + fmt.Sprintf("%04x:  ", k)
+			for i := k; i < k+16; i++ {
+				line = line + fmt.Sprintf("%02x ", c.Memory[i])
+			}
+			line = line + "\n"
+			k = k + 16
+		}
+		if k >= len(c.Memory) {
+			return line
+		}
+		endBlock := blocks * 16
+		line = line + fmt.Sprintf("%04x:  ", k)
+		for i := endBlock; i < endBlock+remainder; i++ {
+			line = line + fmt.Sprintf("%02x ", c.Memory[i])
+		}
+		line = line + "\n" */
+	line := "Memoryk\nlisting\ngoes\nhere\n"
+	return line
 }

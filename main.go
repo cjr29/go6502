@@ -10,9 +10,7 @@ import (
 	"os"
 	"os/signal"
 
-	"fyne.io/fyne/v2"
 	"github.com/cjr29/go6502/asm"
-	"github.com/cjr29/go6502/dashboard"
 	"github.com/cjr29/go6502/host"
 )
 
@@ -29,6 +27,7 @@ func init() {
 }
 
 func main() {
+	fmt.Println("***** Entered go6502.main()")
 	flag.Parse()
 
 	// Initiate assembly from the command line if requested.
@@ -69,14 +68,6 @@ func main() {
 	h.EnableRawMode()
 	h.RunCommands(true)
 
-	//=============== Added Chris Riddick 2024 ===========================
-	os.Setenv("FYNE_THEME", "light")
-	// Set up Fyne window before trying to write to Status line!!!
-	var w fyne.Window = dashboard.New(cpu, reset, load, step, run, pause, exit)
-	// Activate dashboard process
-	//go w.ShowAndRun()
-	w.Show()
-
 }
 
 func handleInterrupt(h *host.Host, c chan os.Signal) {
@@ -89,31 +80,4 @@ func handleInterrupt(h *host.Host, c chan os.Signal) {
 func exitOnError(err error) {
 	fmt.Fprintf(os.Stderr, "ERROR: %v\n", err)
 	os.Exit(1)
-}
-
-//=================== Added Chris Riddick 2024 ======================
-
-func load() {
-	// Loads code in []program into CPU memory at index 0
-	// DO NOTHING
-}
-
-func run() {
-	// DO NOTHING
-}
-
-func step() {
-	// DO NOTHING
-}
-
-func reset() {
-	// DO NOTHING
-}
-
-func pause() {
-	// DO NOTHING
-}
-
-func exit() {
-	os.Exit(0)
 }
