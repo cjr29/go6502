@@ -21,6 +21,7 @@ func loadCPU(t *testing.T, asmString string) *cpu.CPU {
 	cpu := cpu.NewCPU(cpu.NMOS, mem)
 	mem.StoreBytes(sm.Origin, r.Code)
 	cpu.SetPC(sm.Origin)
+
 	return cpu
 }
 

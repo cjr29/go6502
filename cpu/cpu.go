@@ -961,3 +961,54 @@ func (cpu *CPU) unusedn(inst *Instruction, operand []byte) {
 func (cpu *CPU) unusedc(inst *Instruction, operand []byte) {
 	// Do nothing
 }
+
+//=================== Added, Chris Riddick, 2024 ====================
+
+// GetRegisters returns a formatted string of register values
+func (cpu *CPU) GetRegisters() string {
+	var s string
+	// for i := 0; i < len(c.Reg.A); i++ {
+	// 	s = s + fmt.Sprintf("R%02d: x%04x\n", i, c.Registers[i])
+	// }
+	s = "Register\nlisting\ngoes\nhere\n"
+	return s
+}
+
+// GetStack returns a formatted string of bytes beginning at SP down to to of stack
+func (cpu *CPU) GetStack() string {
+	var s string
+	// for i := c.Reg.SP; i <= c.StackHead; i = i + 2 {
+	// 	s = s + fmt.Sprintf("%04x: x%04x\n", i, binary.BigEndian.Uint16(c.Memory[i:]))
+	// }
+	s = "Stack\nlisting\ngoes\nhere\n"
+	return s
+}
+
+// GetAllMemory returns a 16 byte formatted string starting at 0000
+func (cpu *CPU) GetAllMemory() string {
+	var line string
+	/*	blocks := len(c.Memory) / 16
+		remainder := len(c.Memory) % 16
+		// Send header line with memory locations
+		line = "       00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f\n"
+		k := 0
+		for j := 0; j < blocks; j++ {
+			line = line + fmt.Sprintf("%04x:  ", k)
+			for i := k; i < k+16; i++ {
+				line = line + fmt.Sprintf("%02x ", c.Memory[i])
+			}
+			line = line + "\n"
+			k = k + 16
+		}
+		if k >= len(c.Memory) {
+			return line
+		}
+		endBlock := blocks * 16
+		line = line + fmt.Sprintf("%04x:  ", k)
+		for i := endBlock; i < endBlock+remainder; i++ {
+			line = line + fmt.Sprintf("%02x ", c.Memory[i])
+		}
+		line = line + "\n" */
+	line = "Memoryk\nlisting\ngoes\nhere\n"
+	return line
+}
