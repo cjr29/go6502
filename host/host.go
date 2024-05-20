@@ -20,6 +20,7 @@ import (
 	"hash/crc32"
 	"io"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -41,6 +42,12 @@ const (
 	stateRunning
 	stateInterrupted
 	stateBreakpoint
+)
+
+var (
+	logFile    *os.File
+	err        error
+	infoLogger *log.Logger
 )
 
 // A Host represents a fully emulated 6502 system, 64K of memory, a built-in
@@ -80,6 +87,14 @@ type IoState struct {
 
 // New creates a new 6502 host environment.
 func New() *Host {
+	logFile, err = os.OpenFile("6502Emu.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatal("Failed to open log file:", err)
+	}
+	infoLogger = log.New(logFile, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
+
+	infoLogger.Println("***** Entered go6502.host.New()")
+
 	fmt.Println("***** Entered go6502.host.New()")
 
 	console := struct {
@@ -309,6 +324,7 @@ func (h *Host) RestoreIoState(state *IoState) {
 // to a writer. If the commands are interactive, a prompt is displayed while
 // the host waits for the the next command to be entered.
 func (h *Host) RunCommands(interactive bool) {
+	infoLogger.Println("***** RunCommands().")
 	if interactive {
 		fmt.Fprintln(h)
 		h.displayPC()

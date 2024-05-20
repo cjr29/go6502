@@ -7,6 +7,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"os/signal"
 
@@ -27,7 +28,15 @@ func init() {
 }
 
 func main() {
+	LogFile, err := os.OpenFile("6502Emu.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatal("Failed to open log file:", err)
+	}
+	infoLogger := log.New(LogFile, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
+
+	infoLogger.Println("***** Entered go6502.main()")
 	fmt.Println("***** Entered go6502.main()")
+
 	flag.Parse()
 
 	// Initiate assembly from the command line if requested.
@@ -40,6 +49,7 @@ func main() {
 	}
 
 	// Create the host
+	infoLogger.Println("***** Create the host")
 	h := host.New()
 	defer h.Cleanup()
 
@@ -65,6 +75,7 @@ func main() {
 	go handleInterrupt(h, c)
 
 	// Interactively run commands entered by the user.
+	infoLogger.Println("***** Interactively run commands entered by the user.")
 	h.EnableRawMode()
 	h.RunCommands(true)
 
