@@ -1,4 +1,4 @@
-module github.com/cjr29/go6502/host
+module github.com/cjr29/go6502
 
 go 1.21.6
 

@@ -6,6 +6,11 @@
 // set and emulator.
 package cpu
 
+import (
+	"log"
+	"os"
+)
+
 // Architecture selects the CPU chip: 6502 or 65c02
 type Architecture byte
 
@@ -49,6 +54,14 @@ const (
 
 // NewCPU creates an emulated 6502 CPU bound to the specified memory.
 func NewCPU(arch Architecture, m Memory) *CPU {
+	LogFile, err := os.OpenFile("6502Emu.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatal("Failed to open log file:", err)
+	}
+	infoLogger := log.New(LogFile, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
+
+	infoLogger.Println("***** Entered go6502.cpu.NewCPU()")
+
 	cpu := &CPU{
 		Arch:      arch,
 		Mem:       m,
