@@ -11,15 +11,25 @@ import (
 	"os"
 	"os/signal"
 
+	"fyne.io/fyne/v2"
 	"github.com/cjr29/go6502/asm"
+	"github.com/cjr29/go6502/dashboard"
 	"github.com/cjr29/go6502/host"
 )
 
 var (
-	assemble string
+	assemble   string
+	logFile    *os.File
+	err        error
+	infoLogger *log.Logger = log.New(logFile, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
 )
 
 func init() {
+	logFile, err = os.OpenFile("6502Emu.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatal("Failed to open log file:", err)
+	}
+	infoLogger.Println("***** host.settings.init()")
 	flag.StringVar(&assemble, "a", "", "assemble file")
 	flag.CommandLine.Usage = func() {
 		fmt.Println("Usage: go6502 [script] ..\nOptions:")
@@ -28,11 +38,10 @@ func init() {
 }
 
 func main() {
-	LogFile, err := os.OpenFile("6502Emu.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	logFile, err = os.OpenFile("6502Emu.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatal("Failed to open log file:", err)
 	}
-	infoLogger := log.New(LogFile, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
 
 	infoLogger.Println("***** Entered go6502.main()")
 	fmt.Println("***** Entered go6502.main()")
@@ -73,6 +82,19 @@ func main() {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	go handleInterrupt(h, c)
+
+	// Open dashboard
+	// a := app.New()
+	// w := a.NewWindow("Hello World")
+	// w.SetContent(widget.NewLabel("Hello World!"))
+	// w.ShowAndRun()
+	infoLogger.Println("***** Open dashboard.")
+	os.Setenv("FYNE_THEME", "light")
+
+	// Set up Fyne window before trying to write to Status line!!!
+	var w fyne.Window = dashboard.New(h.GetCPU())
+	// Activate dashboard process
+	w.ShowAndRun()
 
 	// Interactively run commands entered by the user.
 	infoLogger.Println("***** Interactively run commands entered by the user.")

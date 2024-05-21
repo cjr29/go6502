@@ -7,6 +7,7 @@
 package cpu
 
 import (
+	"fmt"
 	"log"
 	"os"
 )
@@ -973,4 +974,65 @@ func (cpu *CPU) unusedn(inst *Instruction, operand []byte) {
 // Unused instruction (65c02)
 func (cpu *CPU) unusedc(inst *Instruction, operand []byte) {
 	// Do nothing
+}
+
+//=================== Added, Chris Riddick, 2024 ====================
+
+// GetRegisters returns a formatted string of register values
+func (cpu *CPU) GetRegisters() string {
+	var s string
+	s = s + fmt.Sprintf("A: x%02x\n", cpu.Reg.A)
+	s = s + fmt.Sprintf("X: x%02x\n", cpu.Reg.X)
+	s = s + fmt.Sprintf("Y: x%02x\n", cpu.Reg.Y)
+	s = s + fmt.Sprintf("SP: x%02x\n", cpu.Reg.SP)
+	s = s + fmt.Sprintf("PC: x%04x\n", cpu.Reg.PC)
+	s = s + fmt.Sprintf("Carry: %t\n", cpu.Reg.Carry)
+	s = s + fmt.Sprintf("Zero: %t\n", cpu.Reg.Zero)
+	s = s + fmt.Sprintf("InterruptDisable: %t\n", cpu.Reg.InterruptDisable)
+	s = s + fmt.Sprintf("Decimal: %t\n", cpu.Reg.Decimal)
+	s = s + fmt.Sprintf("Overflow: %t\n", cpu.Reg.Overflow)
+	s = s + fmt.Sprintf("Sign: %t\n", cpu.Reg.Sign)
+	return s
+}
+
+// GetStack returns a formatted string of bytes beginning at SP down to to of stack
+func (cpu *CPU) GetStack() string {
+	var s string
+	for i := cpu.Reg.SP; i <= cpu.Reg.SP+16; i++ {
+		s = s + fmt.Sprintf("%04x: x%0x\n", i, cpu.Mem.LoadByte(uint16(i)))
+	}
+	return s
+}
+
+// GetAllMemory returns a 16 byte formatted string starting at 0000
+func (cpu *CPU) GetAllMemory(addr uint16) string {
+	/* var line string
+	var buf [256]byte
+	var num uint16 = uint16(len(buf) - 1)
+	var j uint16 = 0
+	cpu.Mem.LoadBytes(addr, buf[0:]) // Copy len(buf) bytes from addr into buf[]
+	blocks := num / 16
+	remainder := num % 16
+	// Send header line with memory locations
+	line = "       00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f\n"
+	k := addr
+	for j = 0; j < blocks; j++ {
+		line = line + fmt.Sprintf("%04x:  ", k)
+		for i := k; i < k+16; i++ {
+			line = line + fmt.Sprintf("%02x ", buf[i])
+		}
+		line = line + "\n"
+		k = k + 16
+	}
+	if k >= num {
+		return line
+	}
+	endBlock := blocks * 16
+	line = line + fmt.Sprintf("%04x:  ", k)
+	for i := endBlock; i < endBlock+remainder; i++ {
+		line = line + fmt.Sprintf("%02x ", buf[i])
+	}
+	line = line + "\n" */
+	line := "Memory placeholder"
+	return line
 }
