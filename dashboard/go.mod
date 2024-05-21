@@ -4,12 +4,11 @@ go 1.21.6
 
 require (
 	fyne.io/fyne/v2 v2.4.5
-	github.com/cjr29/go6502/cpu v0.0.0-20240519135954-448b93fea12a
+	github.com/cjr29/go6502/cpu v0.0.0
 )
 
 require (
 	fyne.io/systray v1.10.1-0.20231115130155-104f5ef7839e // indirect
-	github.com/cjr29/go6502/asm v0.0.0-20240519135954-448b93fea12a // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fredbi/uri v1.0.0 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect

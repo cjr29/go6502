@@ -230,6 +230,11 @@ func (h *Host) autocomplete(line string, pos int, key rune) (newLine string, new
 	return "", 0, false
 }
 
+// Returns pointer to CPU structure of host
+func (h *Host) GetCPU() *cpu.CPU {
+	return h.cpu
+}
+
 func sharedPrefix(strings []string) string {
 	helper := func(a, b string) string {
 		l := min(len(a), len(b))
