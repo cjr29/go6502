@@ -6,7 +6,6 @@ package term
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -105,8 +104,6 @@ func NewTerminal(c io.ReadWriter, prompt string) *Terminal {
 	infoLogger := log.New(LogFile, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
 
 	infoLogger.Println("***** Entered go6502.term.NewTerminal()")
-
-	fmt.Println("***** Entered go6502.term.NewTerminal()")
 
 	return &Terminal{
 		c:            c,

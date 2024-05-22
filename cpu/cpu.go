@@ -8,8 +8,6 @@ package cpu
 
 import (
 	"fmt"
-	"log"
-	"os"
 )
 
 // Architecture selects the CPU chip: 6502 or 65c02
@@ -55,13 +53,12 @@ const (
 
 // NewCPU creates an emulated 6502 CPU bound to the specified memory.
 func NewCPU(arch Architecture, m Memory) *CPU {
-	LogFile, err := os.OpenFile("6502Emu.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	/* LogFile, err := os.OpenFile("6502Emu.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatal("Failed to open log file:", err)
 	}
 	infoLogger := log.New(LogFile, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
-
-	infoLogger.Println("***** Entered go6502.cpu.NewCPU()")
+	infoLogger.Println("***** Entered go6502.cpu.NewCPU()") */
 
 	cpu := &CPU{
 		Arch:      arch,
@@ -96,6 +93,7 @@ func (cpu *CPU) NextAddr(addr uint16) uint16 {
 // Step the cpu by one instruction.
 func (cpu *CPU) Step() {
 	// Grab the next opcode at the current PC
+	//log.Printf("CPU Step. PC = x%04x\n", cpu.Reg.PC)
 	opcode := cpu.Mem.LoadByte(cpu.Reg.PC)
 
 	// Look up the instruction data for the opcode
