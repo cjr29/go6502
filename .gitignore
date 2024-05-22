@@ -25,3 +25,6 @@ go.work
 
 # Go module summary
 *.sum
+
+# Logs
+*.log

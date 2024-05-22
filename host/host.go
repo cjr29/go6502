@@ -32,7 +32,6 @@ import (
 	"github.com/cjr29/go6502/cpu"
 	"github.com/cjr29/go6502/disasm"
 	"github.com/cjr29/go6502/term"
-	//"github.com/cjr29/go6502/term"
 )
 
 type state byte
@@ -381,7 +380,7 @@ func (h *Host) setState(s state) {
 }
 
 func (h *Host) processCommand(line string) error {
-	infoLogger.Println("***** processCommand: ", line)
+	//infoLogger.Println("***** processCommand: ", line)
 	var n cmd.Node
 	var args []string
 	if line != "" {
