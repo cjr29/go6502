@@ -32,6 +32,7 @@ import (
 	"github.com/cjr29/go6502/cpu"
 	"github.com/cjr29/go6502/disasm"
 	"github.com/cjr29/go6502/term"
+	//"github.com/cjr29/go6502/term"
 )
 
 type state byte
@@ -93,9 +94,7 @@ func New() *Host {
 	}
 	infoLogger = log.New(logFile, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
 
-	infoLogger.Println("***** Entered go6502.host.New()")
-
-	fmt.Println("***** Entered go6502.host.New()")
+	//infoLogger.Println("***** Entered go6502.host.New()")
 
 	console := struct {
 		io.Reader
@@ -325,11 +324,16 @@ func (h *Host) RestoreIoState(state *IoState) {
 	}
 }
 
+// Process command from GUI
+func (h *Host) ProcessGUICmd(line string) {
+	err = h.processCommand(line)
+}
+
 // RunCommands accepts host commands from a reader and outputs the results
 // to a writer. If the commands are interactive, a prompt is displayed while
 // the host waits for the the next command to be entered.
 func (h *Host) RunCommands(interactive bool) {
-	infoLogger.Println("***** RunCommands().")
+	//infoLogger.Println("***** RunCommands().")
 	if interactive {
 		fmt.Fprintln(h)
 		h.displayPC()
@@ -377,6 +381,7 @@ func (h *Host) setState(s state) {
 }
 
 func (h *Host) processCommand(line string) error {
+	infoLogger.Println("***** processCommand: ", line)
 	var n cmd.Node
 	var args []string
 	if line != "" {

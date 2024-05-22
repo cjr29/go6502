@@ -3,7 +3,6 @@ package dashboard
 import (
 	"fmt"
 	"image/color"
-	"os"
 	"time"
 
 	"fyne.io/fyne/v2"
@@ -18,8 +17,8 @@ import (
 var (
 	c                     *cpu.CPU
 	CPUStatus             string
+	CPUStatusChan         chan string
 	sps, pcs, flag        *widget.Label
-	w                     fyne.Window
 	status                string = "CPU status is displayed here."
 	stackDisplay          string
 	flagDisplay           string
@@ -55,12 +54,14 @@ var (
 var Console = container.NewVBox()
 var ConsoleScroller = container.NewVScroll(Console)
 
-func New(cpu *cpu.CPU) fyne.Window {
+func New(cpu *cpu.CPU, reset func(), load func(), step func(), run func(), pause func(), exit func()) (w fyne.Window, stat chan string) {
 
-	fmt.Println("Entering dashboard.New")
 	c = cpu // All data comes from the CPU structure object
 	a := app.NewWithID("6502")
 	w = a.NewWindow("6502 Simulator")
+
+	CPUStatusChan = make(chan string)
+	go StatusMonitor()
 
 	// Color backgrounds to be used in container stacks
 	registerBackground := canvas.NewRectangle(color.RGBA{R: 173, G: 219, B: 156, A: 200})
@@ -191,7 +192,7 @@ func New(cpu *cpu.CPU) fyne.Window {
 
 	w.SetContent(mainContainer)
 
-	return w
+	return w, CPUStatusChan
 }
 
 func UpdateAll() {
@@ -205,7 +206,7 @@ func UpdateAll() {
 		flagDisplay = "Flag: false"
 	}
 	flag.SetText(flagDisplay)
-	//	inputCPUClock.SetText(fmt.Sprintf("%3f", c.Clock))
+	//inputCPUClock.SetText(fmt.Sprintf("%3f", c.Clock))
 	stackDisplay = c.GetStack()
 	stackLabelWidget.Text = stackDisplay
 	memoryDisplay = c.GetAllMemory(uint16(0x1000))
@@ -215,7 +216,7 @@ func UpdateAll() {
 
 	// Refresh
 	buttonsContainer.Refresh()
-	speedContainer.Refresh()
+	//speedContainer.Refresh()
 	cpuInternalsContainer.Refresh()
 	settingsContainer.Refresh()
 	stackLabelWidget.Refresh()
@@ -239,6 +240,14 @@ func SetStatus(s string) {
 	ConsoleWrite(status)
 }
 
+func StatusMonitor() {
+	// Loop forever watching channel
+	for {
+		s := <-CPUStatusChan
+		SetStatus(s)
+	}
+}
+
 func ConsoleWrite(text string) {
 	Console.Add(&canvas.Text{
 		Text:      text,
@@ -256,31 +265,4 @@ func ConsoleWrite(text string) {
 		ConsoleScroller.ScrollToBottom()
 	}
 	Console.Refresh()
-}
-
-//=================== Added Chris Riddick 2024 ======================
-
-func load() {
-	// Loads code in []program into CPU memory at index 0
-	// DO NOTHING
-}
-
-func run() {
-	// DO NOTHING
-}
-
-func step() {
-	// DO NOTHING
-}
-
-func reset() {
-	// DO NOTHING
-}
-
-func pause() {
-	// DO NOTHING
-}
-
-func exit() {
-	os.Exit(0)
 }

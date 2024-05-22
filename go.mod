@@ -38,9 +38,9 @@ require (
 	github.com/yuin/goldmark v1.5.5 // indirect
 	golang.org/x/image v0.11.0 // indirect
 	golang.org/x/mobile v0.0.0-20230531173138-3c911d8e3eda // indirect
-	golang.org/x/net v0.17.0 // indirect
+	golang.org/x/net v0.23.0 // indirect
 	golang.org/x/sys v0.20.0 // indirect
-	golang.org/x/text v0.13.0 // indirect
+	golang.org/x/text v0.14.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	honnef.co/go/js/dom v0.0.0-20210725211120-f030747120f2 // indirect
@@ -53,5 +53,3 @@ replace github.com/cjr29/go6502/dashboard v0.0.0 => ./dashboard
 replace github.com/cjr29/go6502/host v0.0.0 => ./host
 
 replace github.com/cjr29/go6502/asm v0.0.0 => ./asm
-
-replace github.com/cjr29/go6502/term v0.0.0 => ./term
