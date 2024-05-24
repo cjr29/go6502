@@ -994,10 +994,12 @@ func (cpu *CPU) GetRegisters() string {
 }
 
 // GetStack returns a formatted string of bytes beginning at SP down to to of stack
+// 6502 stack grows from $01FF down to $0000
 func (cpu *CPU) GetStack() string {
 	var s string
-	for i := cpu.Reg.SP; i <= cpu.Reg.SP+16; i++ {
-		s = s + fmt.Sprintf("%04x: x%0x\n", i, cpu.Mem.LoadByte(uint16(i)))
+	stackbottom := uint16(0x01ff)
+	for i := uint16(cpu.Reg.SP) + 0x0100; i < stackbottom; i++ {
+		s = s + fmt.Sprintf("%04x: x%02x\n", i, cpu.Mem.LoadByte(i))
 	}
 	return s
 }
