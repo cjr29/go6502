@@ -9,6 +9,7 @@ require (
 
 require (
 	fyne.io/systray v1.10.1-0.20231115130155-104f5ef7839e // indirect
+	github.com/cjr29/go6502/asm v0.0.0-20240520005320-9fb32dbc95b2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fredbi/uri v1.0.0 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
@@ -38,3 +39,5 @@ require (
 )
 
 replace github.com/cjr29/go6502/cpu v0.0.0 => ../cpu
+
+replace github.com/cjr29/go6502/host v0.0.0 => ../host

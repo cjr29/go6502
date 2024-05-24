@@ -7,8 +7,6 @@ package term
 import (
 	"bytes"
 	"io"
-	"log"
-	"os"
 	"strconv"
 	"sync"
 	"unicode/utf8"
@@ -97,13 +95,12 @@ type Terminal struct {
 // prompt is a string that is written at the start of each input line (i.e.
 // "> ").
 func NewTerminal(c io.ReadWriter, prompt string) *Terminal {
-	LogFile, err := os.OpenFile("6502Emu.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatal("Failed to open log file:", err)
-	}
-	infoLogger := log.New(LogFile, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
-
-	infoLogger.Println("***** Entered go6502.term.NewTerminal()")
+	/* 	LogFile, err := os.OpenFile("6502Emu.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	   	if err != nil {
+	   		log.Fatal("Failed to open log file:", err)
+	   	}
+	   	infoLogger := log.New(LogFile, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
+	   	infoLogger.Println("***** Entered go6502.term.NewTerminal()") */
 
 	return &Terminal{
 		c:            c,
