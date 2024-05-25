@@ -12,7 +12,7 @@ require (
 	fyne.io/systray v1.10.1-0.20231115130155-104f5ef7839e // indirect
 	github.com/beevik/cmd v0.2.0 // indirect
 	github.com/beevik/prefixtree v0.3.0 // indirect
-	github.com/cjr29/go6502/asm v0.0.0-20240520005320-9fb32dbc95b2 // indirect
+	github.com/cjr29/go6502/asm v0.0.0-20240525131527-c7703d12c0d4 // indirect
 	github.com/cjr29/go6502/disasm v0.0.0-20240520005320-9fb32dbc95b2 // indirect
 	github.com/cjr29/go6502/term v0.0.0-20240525125723-5dc44534dbc7 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect

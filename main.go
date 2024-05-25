@@ -64,7 +64,7 @@ func main() {
 
 	// Create dashboard GUI
 	//infoLogger.Println("***** Open dashboard.")
-	os.Setenv("FYNE_THEME", "light")
+	//os.Setenv("FYNE_THEME", "light")
 	// Set up Fyne window before trying to write to Status line!!!
 	w, outbuffer = dashboard.New(h.GetCPU(), h, submit, reset, load, step, run, pause, exit, help)
 

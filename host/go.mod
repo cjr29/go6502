@@ -15,7 +15,7 @@ require golang.org/x/sys v0.20.0 // indirect
 
 replace github.com/cjr29/go6502/host v0.0.0 => ./host
 
-replace github.com/cjr29/go6502/asm v0.0.0 => ../asm
+replace github.com/cjr29/go6502/asm v0.0.0 => ./asm
 
 replace github.com/cjr29/go6502/cpu v0.0.0 => ../cpu
 
