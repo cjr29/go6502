@@ -5,11 +5,16 @@ go 1.21.6
 require (
 	fyne.io/fyne/v2 v2.4.5
 	github.com/cjr29/go6502/cpu v0.0.0
+	github.com/cjr29/go6502/host v0.0.0
 )
 
 require (
 	fyne.io/systray v1.10.1-0.20231115130155-104f5ef7839e // indirect
+	github.com/beevik/cmd v0.2.0 // indirect
+	github.com/beevik/prefixtree v0.3.0 // indirect
 	github.com/cjr29/go6502/asm v0.0.0-20240520005320-9fb32dbc95b2 // indirect
+	github.com/cjr29/go6502/disasm v0.0.0-20240520005320-9fb32dbc95b2 // indirect
+	github.com/cjr29/go6502/term v0.0.0-20240525125723-5dc44534dbc7 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fredbi/uri v1.0.0 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
@@ -32,7 +37,7 @@ require (
 	golang.org/x/image v0.11.0 // indirect
 	golang.org/x/mobile v0.0.0-20230531173138-3c911d8e3eda // indirect
 	golang.org/x/net v0.17.0 // indirect
-	golang.org/x/sys v0.13.0 // indirect
+	golang.org/x/sys v0.20.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	honnef.co/go/js/dom v0.0.0-20210725211120-f030747120f2 // indirect
