@@ -11,6 +11,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"time"
 
 	"fyne.io/fyne/v2"
 	"github.com/cjr29/go6502/asm"
@@ -25,9 +26,8 @@ var (
 	err        error
 	infoLogger *log.Logger = log.New(logFile, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
 	w          fyne.Window
-	//statusChan chan string // channel to send status to dashboard
-	h         *host.Host
-	outbuffer *bytes.Buffer
+	h          *host.Host
+	outbuffer  *bytes.Buffer
 )
 
 func init() {
@@ -47,16 +47,15 @@ func init() {
 }
 
 func main() {
-	logFile, err = os.OpenFile("6502Emu.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	/* logFile, err = os.OpenFile("6502Emu.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatal("Failed to open log file:", err)
-	}
-	defer logFile.Close()
+	} */
 
-	infoLogger.Println("***** Entered go6502.main()")
+	//infoLogger.Println("***** Entered go6502.main()")
 
 	// Create the host
-	infoLogger.Println("***** Create the host")
+	//infoLogger.Println("***** Create the host")
 	h = host.New()
 	defer h.Cleanup()
 
@@ -64,12 +63,10 @@ func main() {
 	infoLogger.Printf("GUI: %v, Assemble: %s", gui, assemble)
 
 	// Create dashboard GUI
-	infoLogger.Println("***** Open dashboard.")
+	//infoLogger.Println("***** Open dashboard.")
 	os.Setenv("FYNE_THEME", "light")
 	// Set up Fyne window before trying to write to Status line!!!
-	w, outbuffer = dashboard.New(h.GetCPU(), h, submit, reset, load, step, run, pause, exit)
-	// Kick off test ticker to report to dashboard very second
-	//go ticker() // Remove after testing complete, used to verify program running
+	w, outbuffer = dashboard.New(h.GetCPU(), h, submit, reset, load, step, run, pause, exit, help)
 
 	// Initiate assembly from the command line if requested.
 	if assemble != "" {
@@ -103,14 +100,21 @@ func main() {
 
 	// Activate dashboard process if startup flag set to true (-g)
 	if gui {
+		// Run every second in background to update dashboard current time display
+		go func() {
+			for range time.Tick(time.Second) {
+				dashboard.UpdateTime()
+			}
+		}()
+
 		h.EnableProcessedMode(os.Stdin, outbuffer)
 		w.ShowAndRun()
 	}
 	// !!!!!!!! Will never get to next line if ShowAnRun() is executed. Program won't return to the main
-	// thread until the fyne window is closed.
+	// thread until the gui window is closed.
 
 	// Interactively run commands entered by the user.
-	infoLogger.Println("***** Interactively run commands entered by the user.")
+	//infoLogger.Println("***** Interactively run commands entered by the user.")
 	h.EnableRawMode()
 	h.RunCommands(true)
 }
@@ -127,22 +131,6 @@ func exitOnError(err error) {
 	os.Exit(1)
 }
 
-/* func ticker() {
-	infoLogger.Println("Start Ticker Example 1")
-
-	// define an interval and the ticker for this interval
-	interval := time.Duration(2) * time.Second
-	// create a new Ticker
-	tk := time.NewTicker(interval)
-	// start the ticker by constructing a loop
-	i := 0
-	for range tk.C {
-		i++
-		//countFuncCall(i)
-		statusChan <- fmt.Sprintf("Tick at: %s  --- count = %d", time.Now().UTC(), i)
-	}
-} */
-
 func submit() {
 	cmd := dashboard.Command()
 	dashboard.SetStatus(cmd)
@@ -152,40 +140,45 @@ func submit() {
 }
 
 func load() {
-	dashboard.SetStatus("Load program")
+	dashboard.SetStatus("Load program - NOT IMPLEMENTED Needs to open file chooser to select binary to load")
 	h.ProcessGUICmd("load monitor.bin $F800")
 	h.ProcessGUICmd("load sample.bin")
 	h.ProcessGUICmd("set compact true")
 	h.ProcessGUICmd("reg PC START")
-	//h.ProcessGUICmd("d .")
-	h.ProcessGUICmd("memory dump")
+	dashboard.SetStatus("Program loaded")
 	dashboard.UpdateAll()
 }
 
 func run() {
-	dashboard.SetStatus("'Run' pressed")
+	dashboard.SetStatus("Running program ...")
+	h.ProcessGUICmd("run")
 	dashboard.UpdateAll()
 }
 
 func step() {
 	dashboard.SetStatus("Step in ...")
 	h.ProcessGUICmd("step in")
-	h.ProcessGUICmd("d .")
 	dashboard.UpdateAll()
 }
 
 func reset() {
-	dashboard.SetStatus("'Reset' pressed")
+	dashboard.SetStatus("'Reset' pressed -- NOT IMPLEMENTED Need code to reset CPU")
 	dashboard.UpdateAll()
 }
 
 func pause() {
-	dashboard.SetStatus("'Pause' pressed")
+	dashboard.SetStatus("Pause running program.")
+	h.Break()
 	dashboard.UpdateAll()
 }
 
 func exit() {
-	dashboard.SetStatus("'Exit' pressed")
+	dashboard.SetStatus("Exit simulator")
 	dashboard.UpdateAll()
 	os.Exit(0)
+}
+
+func help() {
+	h.ProcessGUICmd("help")
+	dashboard.UpdateAll()
 }
