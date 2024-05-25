@@ -152,6 +152,11 @@ func (h *Host) Cleanup() {
 	h.disableRawMode()
 }
 
+// Reset CPU
+func (h *Host) Reset() {
+	h.cpu.Reg.Init()
+}
+
 func (h *Host) enableRawMode() {
 	if !h.rawMode {
 		var err error
