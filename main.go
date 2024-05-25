@@ -60,7 +60,7 @@ func main() {
 	defer h.Cleanup()
 
 	flag.Parse()
-	infoLogger.Printf("GUI: %v, Assemble: %s", gui, assemble)
+	//infoLogger.Printf("GUI: %v, Assemble: %s", gui, assemble)
 
 	// Create dashboard GUI
 	//infoLogger.Println("***** Open dashboard.")
@@ -161,7 +161,8 @@ func step() {
 }
 
 func reset() {
-	dashboard.SetStatus("'Reset' pressed -- NOT IMPLEMENTED Need code to reset CPU")
+	dashboard.SetStatus("'Reset CPU.")
+	h.Reset()
 	dashboard.UpdateAll()
 }
 
