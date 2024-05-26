@@ -2,14 +2,14 @@
 ======
 
 This is my project to learn Go and [Fyne.io](fyne.io) GUI package. It is based on a comple 6502 simulator developed by
-Brett Vickers and forked from his repo [here](git@github.com:beevik/go6502.git). All code for the simulator
+Brett Vickers and forked from his repo [here](https://godoc.org/github.com/beevik/go6502). All code for the simulator
 belongs to Vickers, including an assembler, disassembler, and other utilities. My only contribution here is
 a dashboard package that implements the Fyne.io graphical user interface library. Fyne runs on macOS, Linux,
 and Windows. To build my dashboard, be sure you have v2.4 or later of fyne.io installed. You will have to run
 ```
 go mod tidy
 ```
-to update dependencies in your development environment. You may also want to edit the go.mod files to replace
+To update dependencies in your development environment. You may also want to edit the go.mod files to replace
 paths to point to your development repo if you plan to make changes to the code.
 
 The instructions for using Vickers' CPU terminal monitor are below. To run the simulator using my GUI dashboard,
@@ -19,7 +19,10 @@ $ ./go6502 -g
 ```
 
 Once the program starts, you can use the buttons to do basic functions, or enter commands on the input line and 
-pressing Submit button. The dashboard looks like this:
+pressing Submit button. 
+
+The dashboard looks like this:
+======
 ![Dashboard](./dashboard.png)
 
 Vickers' instructions are reproduced below:
