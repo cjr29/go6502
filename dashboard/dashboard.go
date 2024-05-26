@@ -1,4 +1,4 @@
-// Copyright 2024 Christopher J. Riddick
+// Copyright 2024 Christopher J. Riddick, covered by BSD 3-clause license included in this repo
 //
 // This package creates a GUI for monitoring and controlling CPU simulators
 // It uses the fyne.io package which is cross-compatible with Linux, macOS, and Windows
@@ -8,6 +8,7 @@
 // a fyne.Window and a pointer to a console buffer (bytes.Buffer) that implements the
 // buffered io insterface. This buffer is used by the main program to redirect
 // stdout to the GUI console.
+
 package dashboard
 
 import (
@@ -61,6 +62,7 @@ var (
 	stackContainer        *fyne.Container
 	centerContainer       *fyne.Container
 	middleContainer       *fyne.Container
+	filepicker            *widget.Dialog
 )
 
 var Console = container.NewVBox()

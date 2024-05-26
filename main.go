@@ -141,6 +141,7 @@ func submit() {
 
 func load() {
 	dashboard.SetStatus("Load program - NOT IMPLEMENTED Needs to open file chooser to select binary to load")
+
 	h.ProcessGUICmd("load monitor.bin $F800")
 	h.ProcessGUICmd("load sample.bin")
 	h.ProcessGUICmd("set compact true")
