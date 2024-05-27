@@ -14,22 +14,25 @@ package dashboard
 import (
 	"bytes"
 	"image/color"
+	"os"
+
+	//"log"
 	"time"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
 	"github.com/cjr29/go6502/cpu"
 	"github.com/cjr29/go6502/host"
 )
 
 var (
-	c         *cpu.CPU
-	h         *host.Host
-	CPUStatus string
-
+	c                     *cpu.CPU
+	h                     *host.Host
+	CPUStatus             string
 	status                string = "CPU status is displayed here."
 	stackDisplay          string
 	flagDisplay           string
@@ -52,6 +55,8 @@ var (
 	exitButton            *widget.Button
 	helpButton            *widget.Button
 	submitButton          *widget.Button
+	assembleButton        *widget.Button
+	fileButton            *widget.Button
 	currentTime           *widget.Label
 	mainContainer         *fyne.Container
 	buttonsContainer      *fyne.Container
@@ -62,14 +67,17 @@ var (
 	stackContainer        *fyne.Container
 	centerContainer       *fyne.Container
 	middleContainer       *fyne.Container
-	filepicker            *widget.Dialog
+	fd                    *dialog.FileDialog
+	selectedDirectory     *widget.Label
+	selectedFile          *widget.Label
+	fileURI               fyne.URI
+	w                     fyne.Window
 )
 
 var Console = container.NewVBox()
 var ConsoleScroller = container.NewVScroll(Console)
 
-func New(cpu *cpu.CPU, host *host.Host, submit func(), reset func(), load func(), step func(),
-	run func(), pause func(), exit func(), help func()) (w fyne.Window, o *bytes.Buffer) {
+func New(cpu *cpu.CPU, host *host.Host) (w fyne.Window, o *bytes.Buffer) {
 
 	c = cpu  // All data comes from the CPU structure object
 	h = host // Structure that manages the specific CPU implementation
@@ -83,14 +91,17 @@ func New(cpu *cpu.CPU, host *host.Host, submit func(), reset func(), load func()
 	//consoleBackground := canvas.NewRectangle(color.RGBA{R: 223, G: 159, B: 173, A: 200})
 
 	// Control buttons
-	loadButton = widget.NewButton("Load", load)
+	loadButton = widget.NewButton("Load", loadSelectedFile)
 	runButton = widget.NewButton("Run", run)
 	stepButton = widget.NewButton("Step", step)
 	resetButton = widget.NewButton("Reset", reset)
 	pauseButton = widget.NewButton("Pause", pause)
 	exitButton = widget.NewButton("Exit", exit)
-	submitButton = widget.NewButton("Submit", submit)
+	submitButton = widget.NewButton("Submit manual commands in field below", submit)
 	helpButton = widget.NewButton("Help", help)
+	selectedFile = widget.NewLabel("")
+	fileButton = widget.NewButton("File", func() { showFilePicker(w) })
+	assembleButton = widget.NewButton("Assemble", assembleSelectedFile)
 
 	// Display time
 	currentTime = widget.NewLabel("")
@@ -143,9 +154,12 @@ func New(cpu *cpu.CPU, host *host.Host, submit func(), reset func(), load func()
 	)
 
 	buttonsContainer = container.NewHBox(
-		submitButton,
-		resetButton,
+		fileButton,
+		selectedFile,
+		assembleButton,
 		loadButton,
+		//submitButton,
+		resetButton,
 		runButton,
 		stepButton,
 		pauseButton,
@@ -156,6 +170,7 @@ func New(cpu *cpu.CPU, host *host.Host, submit func(), reset func(), load func()
 
 	settingsContainer = container.NewVBox(
 		buttonsContainer,
+		submitButton,
 		commandContainer,
 	)
 
@@ -220,6 +235,94 @@ func ClearCmdLine() {
 
 }
 
+// ===================================== Button callbacks
+//
+// Show file picker and return selected file
+func showFilePicker(w fyne.Window) {
+	dialog.ShowFileOpen(func(f fyne.URIReadCloser, err error) {
+		saveFile := "NoFileYet"
+		if err != nil {
+			dialog.ShowError(err, w)
+			return
+		}
+		if f == nil {
+			return
+		}
+		saveFile = f.URI().Path()
+		fileURI = f.URI()
+		selectedFile.SetText(saveFile)
+	}, w)
+}
+
+// Load selected binary file
+func loadSelectedFile() {
+	if fileURI == nil || fileURI.Extension() != ".bin" {
+		SetStatus("Binary file not selected. File must have .bin extension")
+		return
+	}
+	h.ProcessGUICmd("load " + fileURI.Name())
+	h.ProcessGUICmd("reg PC START")
+	SetStatus("Program loaded")
+	UpdateAll()
+}
+
+// Assemble selected source file
+func assembleSelectedFile() {
+	if fileURI == nil || fileURI.Extension() != ".asm" {
+		SetStatus("Source file not selected. File must have .asm extension")
+		return
+	}
+	h.ProcessGUICmd("assemble file " + fileURI.Name())
+	SetStatus("Binary .bin and source map .map files generated")
+	UpdateAll()
+}
+
+func run() {
+	SetStatus("Running program ...")
+	h.ProcessGUICmd("run")
+	UpdateAll()
+}
+
+func step() {
+	SetStatus("Step in ...")
+	h.ProcessGUICmd("step in")
+	UpdateAll()
+}
+
+func reset() {
+	SetStatus("'Reset CPU.")
+	h.Reset()
+	UpdateAll()
+}
+
+func pause() {
+	SetStatus("Pause running program.")
+	h.Break()
+	UpdateAll()
+}
+
+func exit() {
+	SetStatus("Exit simulator")
+	UpdateAll()
+	os.Exit(0)
+}
+
+func help() {
+	h.ProcessGUICmd("help")
+	UpdateAll()
+}
+
+func submit() {
+	cmd := Command()
+	SetStatus(cmd)
+	h.ProcessGUICmd(cmd)
+	ClearCmdLine()
+	UpdateAll()
+}
+
+//=========================================== End Button Callbacks ========================
+
+// Utilities
 func UpdateTime() {
 	formatted := time.Now().Format("Time: 03:04:05")
 	currentTime.SetText(formatted)

@@ -66,7 +66,7 @@ func main() {
 	//infoLogger.Println("***** Open dashboard.")
 	//os.Setenv("FYNE_THEME", "light")
 	// Set up Fyne window before trying to write to Status line!!!
-	w, outbuffer = dashboard.New(h.GetCPU(), h, submit, reset, load, step, run, pause, exit, help)
+	w, outbuffer = dashboard.New(h.GetCPU(), h)
 
 	// Initiate assembly from the command line if requested.
 	if assemble != "" {
@@ -129,58 +129,4 @@ func handleInterrupt(h *host.Host, c chan os.Signal) {
 func exitOnError(err error) {
 	fmt.Fprintf(os.Stderr, "ERROR: %v\n", err)
 	os.Exit(1)
-}
-
-func submit() {
-	cmd := dashboard.Command()
-	dashboard.SetStatus(cmd)
-	h.ProcessGUICmd(cmd)
-	dashboard.ClearCmdLine()
-	dashboard.UpdateAll()
-}
-
-func load() {
-	dashboard.SetStatus("Load program - NOT IMPLEMENTED Needs to open file chooser to select binary to load")
-
-	h.ProcessGUICmd("load monitor.bin $F800")
-	h.ProcessGUICmd("load sample.bin")
-	h.ProcessGUICmd("set compact true")
-	h.ProcessGUICmd("reg PC START")
-	dashboard.SetStatus("Program loaded")
-	dashboard.UpdateAll()
-}
-
-func run() {
-	dashboard.SetStatus("Running program ...")
-	h.ProcessGUICmd("run")
-	dashboard.UpdateAll()
-}
-
-func step() {
-	dashboard.SetStatus("Step in ...")
-	h.ProcessGUICmd("step in")
-	dashboard.UpdateAll()
-}
-
-func reset() {
-	dashboard.SetStatus("'Reset CPU.")
-	h.Reset()
-	dashboard.UpdateAll()
-}
-
-func pause() {
-	dashboard.SetStatus("Pause running program.")
-	h.Break()
-	dashboard.UpdateAll()
-}
-
-func exit() {
-	dashboard.SetStatus("Exit simulator")
-	dashboard.UpdateAll()
-	os.Exit(0)
-}
-
-func help() {
-	h.ProcessGUICmd("help")
-	dashboard.UpdateAll()
 }
