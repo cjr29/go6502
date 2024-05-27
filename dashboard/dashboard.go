@@ -324,7 +324,7 @@ func submit() {
 
 // Utilities
 func UpdateTime() {
-	formatted := time.Now().Format("Time: 03:04:05")
+	formatted := time.Now().Format("Time: 15:05:01")
 	currentTime.SetText(formatted)
 }
 
