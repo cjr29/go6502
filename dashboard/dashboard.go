@@ -335,8 +335,8 @@ func SetStatus(s string) {
 
 func ConsoleWrite(text string) {
 	Console.Add(&canvas.Text{
-		Text:      text,
-		Color:     color.Black,
+		Text: text,
+		//Color:     color.Black,
 		TextSize:  12,
 		TextStyle: fyne.TextStyle{Monospace: true},
 	})
