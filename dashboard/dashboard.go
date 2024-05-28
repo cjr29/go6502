@@ -57,6 +57,7 @@ var (
 	submitButton          *widget.Button
 	assembleButton        *widget.Button
 	fileButton            *widget.Button
+	themeButton           *widget.Button
 	currentTime           *widget.Label
 	mainContainer         *fyne.Container
 	buttonsContainer      *fyne.Container
@@ -71,6 +72,7 @@ var (
 	selectedDirectory     *widget.Label
 	selectedFile          *widget.Label
 	fileURI               fyne.URI
+	a                     fyne.App
 	w                     fyne.Window
 )
 
@@ -82,7 +84,7 @@ func New(cpu *cpu.CPU, host *host.Host) (w fyne.Window, o *bytes.Buffer) {
 	c = cpu  // All data comes from the CPU structure object
 	h = host // Structure that manages the specific CPU implementation
 
-	a := app.NewWithID("6502")
+	a = app.NewWithID("6502")
 	w = a.NewWindow("6502 Simulator")
 
 	// Color backgrounds to be used in container stacks
