@@ -25,6 +25,10 @@ The dashboard looks like this:
 ======
 ![Dashboard](./dashboard.png)
 
+Pressing the File button opens modal dialog:
+======
+![File Picker](./filepicker.png)
+
 Vickers' instructions are reproduced below:
 ======
 
