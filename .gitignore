@@ -28,3 +28,10 @@ go.work
 
 # Logs
 *.log
+
+# Working folders
+/build
+
+# Scripts
+*.bash
+

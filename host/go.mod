@@ -1,6 +1,6 @@
 module github.com/cjr29/go6502
 
-go 1.21.6
+go 1.22.3
 
 require (
 	github.com/beevik/cmd v0.2.0
